@@ -29,7 +29,7 @@ export function BottomNav() {
 
       <Link href="/profile" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
         <User size={22} />
-        <span className="text-xs">Perfil</span>
+        <span className="text-xs">Perfi</span>
       </Link>
 
     </div>
