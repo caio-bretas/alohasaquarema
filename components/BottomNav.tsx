@@ -17,7 +17,7 @@ export function BottomNav() {
       </Link>
 
 
-      <Link href="/search" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
+      <Link href="/busca" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
         <Search size={22} />
         <span className="text-xs">Buscar</span>
       </Link>
