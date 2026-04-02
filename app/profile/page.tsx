@@ -1,4 +1,5 @@
-"use client"
+
+import {signIn } from "next-auth/react"
 import { 
   User, 
   Settings, 
@@ -14,8 +15,13 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import { ButtonLogin } from "./_components/ButtonLogin"
+import { ProfileContent } from "./_components/ProfileContent"
 
-export default function ProfilePage() {
+export default async  function ProfilePage() {
   const sections = [
     {
       title: "Conta",
@@ -41,6 +47,12 @@ export default function ProfilePage() {
     }
   ]
 
+
+  const session = await auth()
+
+
+
+
   return (
     <div className="min-h-screen bg-zinc-50 w-full overflow-x-hidden pb-32">
       
@@ -51,71 +63,9 @@ export default function ProfilePage() {
         </Link>
         <h1 className="text-xl font-black text-zinc-900 uppercase tracking-tighter italic">Perfil</h1>
       </header>
-
-      <main className="px-4 py-8 space-y-8">
-        
-        {/* Card do Usuário (Destaque) */}
-        <section className="flex flex-col items-center text-center space-y-4">
-          <div className="relative">
-            <div className="size-28 rounded-[2.5rem] bg-zinc-200 overflow-hidden border-4 border-white shadow-xl">
-              {/* Substitua pelo src da imagem do usuário */}
-              <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-purple-600" />
-            </div>
-            <button className="absolute bottom-0 right-0 p-2.5 bg-zinc-900 text-white rounded-2xl border-4 border-white shadow-lg active:scale-90 transition-all">
-              <Camera className="size-4" />
-            </button>
-          </div>
-          
-          <div>
-            <h2 className="text-xl font-black text-zinc-900 uppercase tracking-tight">Gabriel Saquarema</h2>
-            <p className="text-sm text-zinc-400 font-medium">gabriel@exemplo.com</p>
-          </div>
-
-          <button className="bg-white border border-zinc-200 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-600 shadow-sm active:bg-zinc-50">
-            Editar Perfil
-          </button>
-        </section>
-
-        {/* Listas de Configuração */}
-        <div className="space-y-8">
-          {sections.map((section) => (
-            <section key={section.title} className="space-y-3">
-              <h3 className="px-2 text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">
-                {section.title}
-              </h3>
-              
-              <div className="bg-white border border-zinc-100 rounded-[2rem] overflow-hidden shadow-sm">
-                {section.items.map((item, index) => (
-                  <button 
-                    key={item.label}
-                    className={`w-full flex items-center justify-between p-5 active:bg-zinc-50 transition-all ${
-                      index !== section.items.length - 1 ? "border-b border-zinc-50" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`p-3 rounded-2xl ${item.bg}`}>
-                        <item.icon className={`size-5 ${item.color}`} />
-                      </div>
-                      <span className="text-sm font-bold text-zinc-700">{item.label}</span>
-                    </div>
-                    <ChevronRight className="size-4 text-zinc-300" />
-                  </button>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-
-        {/* Botão Logout */}
-        <button className="w-full flex items-center justify-center gap-2 p-5 bg-red-50 text-red-600 rounded-[2rem] font-black text-xs uppercase tracking-widest border border-red-100 active:scale-95 transition-all mt-4">
-          <LogOut className="size-5" />
-          Sair da Conta
-        </button>
-
-        <p className="text-center text-[10px] text-zinc-300 font-medium mt-8 italic">
-          Versão 2.4.0 • Saquarema Explore
-        </p>
-      </main>
+     
+      
+    <ProfileContent session={session as any} />
 
       {/* Reutilizando sua Nav de App para manter a consistência */}
   

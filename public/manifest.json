@@ -1,6 +1,6 @@
 {
-  "name": "Meu Aplicativo PWA",
-  "short_name": "MeuApp",
+  "name": "Aloha Saquarema",
+  "short_name": "Aloha Saquarema",
   "display": "standalone",
   "start_url": "/",
   "icons": [
