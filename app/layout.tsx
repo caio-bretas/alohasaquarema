@@ -18,13 +18,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 export const metadata: Metadata = {
-  title: "Meu App",
+  title: "Aloha saquarema",
   description: "Gerado pelo Next.js",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/aloha.ico",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Meu App",
+    title: "Aloha saquarema",
+    
   },
 };
 

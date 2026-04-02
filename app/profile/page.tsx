@@ -11,7 +11,8 @@ import {
   CreditCard, 
   ShieldCheck,
   CircleHelp,
-  ChevronLeft
+  ChevronLeft,
+  Heading1
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -65,7 +66,7 @@ export default async  function ProfilePage() {
       </header>
      
       
-    <ProfileContent session={session as any} />
+   {session ? <ProfileContent session={session as any}  /> : <ButtonLogin />}
 
       {/* Reutilizando sua Nav de App para manter a consistência */}
   
