@@ -53,6 +53,7 @@ export default async  function ProfilePage() {
   if(!session){
     return redirect("/login")
   }
+  console.log("chegou aqui",session)
 
 
 
