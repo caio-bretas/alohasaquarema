@@ -50,7 +50,9 @@ export default async  function ProfilePage() {
 
 
   const session = await auth()
-  if(!session) return <ButtonLogin />
+  if(!session){
+    return redirect("/login")
+  }
 
 
 
@@ -67,8 +69,7 @@ export default async  function ProfilePage() {
       </header>
      
       
-   {session ? <ProfileContent  /> : <ButtonLogin />}
-
+<ProfileContent  /> 
       {/* Reutilizando sua Nav de App para manter a consistência */}
   
     </div>
