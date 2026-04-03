@@ -50,6 +50,7 @@ export default async  function ProfilePage() {
 
 
   const session = await auth()
+  if(!session) return <ButtonLogin />
 
 
 
