@@ -50,7 +50,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">{children}
          <BottomNav />
-         <PWARegistration />
+         
          <InstallButton />
       </body>
      
