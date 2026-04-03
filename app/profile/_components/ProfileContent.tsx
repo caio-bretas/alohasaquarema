@@ -22,15 +22,13 @@ import { redirect } from "next/navigation"
 import { ButtonLogin } from "./ButtonLogin";
 import { ButtonSair } from "./ButtonSair";
 
-interface Session {
-  user: {
-    name: string;
-    email: string;
-    image: string;
-  };
-}
-
-export function ProfileContent({ session }: { session: Session }) {
+export async function ProfileContent() {
+  const session = await  auth();
+  const userdata = {
+    name: session?.user?.name,
+    email: session?.user?.email,
+    image: session?.user?.image
+  }
       const sections = [
     {
       title: "Conta",
@@ -70,7 +68,7 @@ export function ProfileContent({ session }: { session: Session }) {
  <section className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
             <div className="size-28 rounded-[2.5rem] bg-zinc-200 overflow-hidden border-4 border-zinc-800 shadow-xl">
-             <img src={session.user.image} alt="" />
+             <img src={userdata.image || "/default.png"} alt="" />
               <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-purple-600" />
             </div>
             <button className="absolute bottom-0 right-0 p-2.5 bg-zinc-900 text-white rounded-2xl border-4 border-white shadow-lg active:scale-90 transition-all">
@@ -79,8 +77,8 @@ export function ProfileContent({ session }: { session: Session }) {
           </div>
           
           <div>
-            <h2 className="text-xl font-black text-zinc-900 uppercase tracking-tight">{session.user.name}</h2>
-            <p className="text-sm text-zinc-400 font-medium">{session.user.email}</p>
+            <h2 className="text-xl font-black text-zinc-900 uppercase tracking-tight">{userdata.name}</h2>
+            <p className="text-sm text-zinc-400 font-medium">{userdata.email}</p>
           </div>
 
           <button className="bg-white border border-zinc-200 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-600 shadow-sm active:bg-zinc-50">

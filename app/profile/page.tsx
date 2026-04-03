@@ -66,7 +66,7 @@ export default async  function ProfilePage() {
       </header>
      
       
-   {session ? <ProfileContent session={session as any}  /> : <ButtonLogin />}
+   {session ? <ProfileContent  /> : <ButtonLogin />}
 
       {/* Reutilizando sua Nav de App para manter a consistência */}
   
