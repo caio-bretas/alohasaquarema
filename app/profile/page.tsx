@@ -50,10 +50,10 @@ export default async  function ProfilePage() {
 
 
   const session = await auth()
-  if(!session){
+  if(!session?.user){
     return redirect("/login")
   }
-  console.log("chegou aqui",session)
+console.log("SESSION:", session)
 
 
 
