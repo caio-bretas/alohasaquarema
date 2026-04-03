@@ -1,18 +1,8 @@
 
-import {signIn } from "next-auth/react"
 import { 
-  User, 
-  Settings, 
-  Bell, 
-  Lock, 
-  LogOut, 
-  ChevronRight, 
-  Camera, 
-  CreditCard, 
-  ShieldCheck,
-  CircleHelp,
+
   ChevronLeft,
-  Heading1
+ 
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -23,30 +13,7 @@ import { ButtonLogin } from "./_components/ButtonLogin"
 import { ProfileContent } from "./_components/ProfileContent"
 
 export default async  function ProfilePage() {
-  const sections = [
-    {
-      title: "Conta",
-      items: [
-        { icon: User, label: "Informações Pessoais", color: "text-blue-500", bg: "bg-blue-50" },
-        { icon: Lock, label: "Segurança e Senha", color: "text-emerald-500", bg: "bg-emerald-50" },
-        { icon: CreditCard, label: "Métodos de Pagamento", color: "text-orange-500", bg: "bg-orange-50" },
-      ]
-    },
-    {
-      title: "Preferências",
-      items: [
-        { icon: Bell, label: "Notificações", color: "text-purple-500", bg: "bg-purple-50" },
-        { icon: ShieldCheck, label: "Privacidade", color: "text-indigo-500", bg: "bg-indigo-50" },
-        { icon: Settings, label: "Configurações do App", color: "text-zinc-500", bg: "bg-zinc-50" },
-      ]
-    },
-    {
-      title: "Suporte",
-      items: [
-        { icon: CircleHelp, label: "Central de Ajuda", color: "text-pink-500", bg: "bg-pink-50" },
-      ]
-    }
-  ]
+
 
 
   const session = await auth()
@@ -68,7 +35,7 @@ console.log("SESSION:", session)
         </Link>
         <h1 className="text-xl font-black text-zinc-900 uppercase tracking-tighter italic">Perfil</h1>
       </header>
-     
+     <h1>a</h1>
       
 
       {/* Reutilizando sua Nav de App para manter a consistência */}
