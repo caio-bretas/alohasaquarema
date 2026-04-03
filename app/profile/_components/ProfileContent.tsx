@@ -57,14 +57,7 @@ export async function ProfileContent() {
     return (
          <main className="px-4 py-8 space-y-8">
         
-     {!session ? (
-     
-      <ButtonLogin />     
 
-  
-
-
-     ): (
  <section className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
             <div className="size-28 rounded-[2.5rem] bg-zinc-200 overflow-hidden border-4 border-zinc-800 shadow-xl">
@@ -87,7 +80,7 @@ export async function ProfileContent() {
    
         </section>
 
-     )}
+   
 
      {session ?(
 
