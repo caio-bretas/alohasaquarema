@@ -37,7 +37,7 @@ console.log("SESSION:", session)
       </header>
      <h1>a</h1>
       
-
+<h2>p</h2>
       {/* Reutilizando sua Nav de App para manter a consistência */}
   
     </div>
