@@ -29,6 +29,8 @@ export async function ProfileContent() {
     email: session?.user?.email,
     image: session?.user?.image
   }
+
+  if(!session) return <ButtonLogin />
       const sections = [
     {
       title: "Conta",
