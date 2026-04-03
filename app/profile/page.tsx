@@ -70,7 +70,7 @@ export default async  function ProfilePage() {
       </header>
      
       
-<ProfileContent  /> 
+
       {/* Reutilizando sua Nav de App para manter a consistência */}
   
     </div>
