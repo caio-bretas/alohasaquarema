@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { BottomNav } from "@/components/BottomNav";
 import PWARegistration from "@/components/PWARegistration";
 import InstallButton from "@/components/buttonapp";
-
+import { Toaster, toast } from 'sonner';
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
@@ -47,8 +47,10 @@ export default function RootLayout({
     >
       <head>
        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/aloha.png" />
       </head>
       <body className="min-h-full flex flex-col">{children}
+       <Toaster />
          <BottomNav />
          <PWARegistration />
          <InstallButton />

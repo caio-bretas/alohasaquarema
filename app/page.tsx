@@ -9,8 +9,16 @@ import { CardImg } from "@/components/CardImg";
 
 // Assets
 import banner from "@/public/benner.png";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+  const userdata = {
+    name: session?.user?.name!,
+    email: session?.user?.email!,
+    image: session?.user?.image!
+  }
+  
   return (
     <div className="min-h-screen bg-white pb-32 overflow-x-hidden">
       
@@ -38,7 +46,7 @@ export default function Home() {
         
         {/* BUSCA: Centralizada */}
         <section className="animate-in fade-in slide-in-from-top-4 duration-700">
-           <BuscarCity />
+           <BuscarCity  email={userdata.email} name={userdata.name}/>
         </section>
 
         {/* BANNER DE DESTAQUE: Estilo Card Flutuante */}

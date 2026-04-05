@@ -21,40 +21,35 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { ButtonLogin } from "./ButtonLogin";
 import { ButtonSair } from "./ButtonSair";
+import { ButtonEditPerfil } from "./ButtonEditPerfil"
+import { ButtonDrawer } from "./ButtonDrawer"
 
 export async function ProfileContent() {
   const session = await  auth();
   const userdata = {
-    name: session?.user?.name,
-    email: session?.user?.email,
-    image: session?.user?.image
+    name: session?.user?.name!,
+    email: session?.user?.email!,
+    image: session?.user?.image,
+    telefone: session?.user?.telefone || ""
   }
 
   if(!session) return <ButtonLogin />
-      const sections = [
-    {
-      title: "Conta",
-      items: [
-        { icon: User, label: "Informações Pessoais", color: "text-blue-500", bg: "bg-blue-50" },
-        { icon: Lock, label: "Segurança e Senha", color: "text-emerald-500", bg: "bg-emerald-50" },
-        { icon: CreditCard, label: "Métodos de Pagamento", color: "text-orange-500", bg: "bg-orange-50" },
-      ]
-    },
-    {
-      title: "Preferências",
-      items: [
-        { icon: Bell, label: "Notificações", color: "text-purple-500", bg: "bg-purple-50" },
-        { icon: ShieldCheck, label: "Privacidade", color: "text-indigo-500", bg: "bg-indigo-50" },
-        { icon: Settings, label: "Configurações do App", color: "text-zinc-500", bg: "bg-zinc-50" },
-      ]
-    },
-    {
-      title: "Suporte",
-      items: [
-        { icon: CircleHelp, label: "Central de Ajuda", color: "text-pink-500", bg: "bg-pink-50" },
-      ]
-    }
-  ]
+ const sections = [
+  {
+    title: "Conta",
+    items: [
+      { icon: "user", label: "Informações Pessoais", color: "text-blue-500", bg: "bg-blue-50" },
+      { icon: "Settings", label: "Configuração", color: "text-emerald-500", bg: "bg-emerald-50" },
+      
+    ]
+  },
+  {
+    title: "Suporte",
+    items: [
+      { icon: "help", label: "Central de Ajuda", color: "text-pink-500", bg: "bg-pink-50" },
+    ]
+  }
+]
 
     return (
          <main className="px-4 py-8 space-y-8">
@@ -76,10 +71,7 @@ export async function ProfileContent() {
             <p className="text-sm text-zinc-400 font-medium">{userdata.email}</p>
           </div>
 
-          <button className="bg-white border border-zinc-200 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-600 shadow-sm active:bg-zinc-50">
-            Editar Perfil
-          </button>
-   
+      
         </section>
 
    
@@ -94,22 +86,18 @@ export async function ProfileContent() {
               </h3>
               
               <div className="bg-white border border-zinc-100 rounded-[2rem] overflow-hidden shadow-sm">
-                {section.items.map((item, index) => (
-                  <button 
-                    key={item.label}
-                    className={`w-full flex items-center justify-between p-5 active:bg-zinc-50 transition-all ${
-                      index !== section.items.length - 1 ? "border-b border-zinc-50" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`p-3 rounded-2xl ${item.bg}`}>
-                        <item.icon className={`size-5 ${item.color}`} />
-                      </div>
-                      <span className="text-sm font-bold text-zinc-700">{item.label}</span>
-                    </div>
-                    <ChevronRight className="size-4 text-zinc-300" />
-                  </button>
-                ))}
+               {section.items.map((item, index) => (
+  <div
+    key={item.label}
+    className={`${
+      index !== section.items.length - 1
+        ? "border-b border-zinc-50"
+        : ""
+    }`}
+  >
+    <ButtonDrawer item={item} email={userdata.email} telefone={userdata.telefone   } name={userdata.name}  />
+  </div>
+))}
               </div>
             </section>
           ))}

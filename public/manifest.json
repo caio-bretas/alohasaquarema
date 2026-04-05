@@ -5,9 +5,16 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "icos/vercel.svg", 
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/svg+xml"
+      "src": "/aloha.png", 
+   
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+     {
+      "src": "/surf.png", 
+   
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }
