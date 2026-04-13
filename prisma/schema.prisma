@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -10,9 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  
 }
-
 
 model Account {
   id                 String  @id @default(cuid())
@@ -33,35 +26,451 @@ model Account {
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
+
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@map("sessions")
 }
- 
+enum UserRole {
+  ADMIN       // Administrador da plataforma
+  PRODUCER    // Produtor de eventos
+  CUSTOMER    // Comprador de ingressos
+}
+
+enum EventStatus {
+  DRAFT       // Rascunho (não publicado)
+  PUBLISHED   // Publicado e visível
+  PAUSED      // Vendas pausadas
+  SOLD_OUT    // Esgotado
+  FINISHED    // Encerrado
+  CANCELLED   // Cancelado
+}
+
+enum EventCategory {
+  PAGODE
+  SAMBA
+  FORRO
+  ELETRONICO
+  ROCK
+  AXE
+  SERTANEJO
+  FESTA
+  TEATRO
+  ESPORTE
+  OUTRO
+}
+
+enum TicketStatus {
+  ACTIVE      // Ingresso válido
+  USED        // Já utilizado no check-in
+  CANCELLED   // Cancelado/reembolsado
+  TRANSFERRED // Transferido para outro usuário
+}
+
+enum OrderStatus {
+  PENDING     // Aguardando pagamento
+  PAID        // Pago
+  FAILED      // Falhou
+  REFUNDED    // Reembolsado
+  CANCELLED   // Cancelado
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  BOLETO
+}
+
+enum BatchStatus {
+  SCHEDULED   // Agendado para abertura futura
+  ACTIVE      // Disponível para compra
+  PAUSED      // Pausado manualmente
+  SOLD_OUT    // Esgotado
+  CLOSED      // Encerrado (data ou qtd)
+}
+
+enum SeatStatus {
+  AVAILABLE
+  RESERVED    // Reservado por 10min durante checkout
+  SOLD
+  BLOCKED     // Bloqueado pelo produtor
+}
+
+enum CouponType {
+  PERCENTAGE  // Ex: 20% de desconto
+  FIXED       // Ex: R$15 de desconto
+}
+
+enum CheckInMethod {
+  QR_CODE
+  MANUAL
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  telefone      String?
+ phone         String?
+  cpf           String?   @unique
+  passwordHash  String?
+  avatarUrl     String?
+  role          UserRole  @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
   accounts      Account[]
+  
+  // Relações
+  producer      Producer?
+  orders        Order[]
+  tickets       Ticket[]
+  checkIns      CheckIn[]  @relation("CheckInStaff")
   sessions      Session[]
+
  
   @@map("users")
 }
- 
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
- 
-  @@unique([identifier, token])
-  @@map("verification_tokens")
+
+
+model Producer {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  companyName String
+  cnpj        String?  @unique
+  description String?
+  logoUrl     String?
+  bannerUrl   String?
+  instagram   String?
+  website     String?
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events Event[]
+
+  @@map("producers")
+}
+
+// ============================================================
+// EVENTO
+// ============================================================
+
+model Event {
+  id              String        @id @default(cuid())
+  producerId      String
+  title           String
+  slug            String        @unique
+  description     String?       @db.Text
+  category        EventCategory @default(OUTRO)
+  status          EventStatus   @default(DRAFT)
+
+  // Localização
+  venueName       String
+  address         String
+  city            String        @default("Saquarema")
+  state           String        @default("RJ")
+  zipCode         String?
+  latitude        Float?
+  longitude       Float?
+
+  // Datas
+  startDate       DateTime
+  endDate         DateTime
+  doorsOpenAt     DateTime?     // Horário de abertura dos portões
+  salesStartAt    DateTime?     // Quando as vendas abrem
+  salesEndAt      DateTime?     // Quando as vendas fecham
+
+  // Mídia
+  coverImageUrl   String?
+  bannerImageUrl  String?
+  galleryUrls     String[]      @default([])
+
+  // Configurações
+  ageRating       Int           @default(18)      // Classificação etária
+  capacity        Int                              // Capacidade total do evento
+  isPrivate       Boolean       @default(false)   // Evento privado (link direto)
+  requiresCpf     Boolean       @default(true)    // Exige CPF na compra
+  allowTransfer   Boolean       @default(true)    // Permite transferência de ingresso
+  maxPerOrder     Int           @default(10)      // Máximo de ingressos por pedido
+  absorveFee      Boolean       @default(false)   // Produtor absorve a taxa da plataforma
+
+  // Taxas
+  platformFeePercent Float       @default(10.0)   // % da plataforma sobre cada ingresso
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  tags            String[]      @default([])
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  publishedAt     DateTime?
+
+  // Relações
+  producer        Producer      @relation(fields: [producerId], references: [id])
+
+  ticketTypes     TicketType[]
+  coupons         Coupon[]
+  orders          Order[]
+  seatMap         SeatMap?
+  checkIns        CheckIn[]
+
+  @@index([slug])
+  @@index([producerId])
+  @@index([status, startDate])
+  @@map("events")
+}
+
+// ============================================================
+// TIPO DE INGRESSO (ex: Pista, VIP, Camarote)
+// ============================================================
+
+model TicketType {
+  id              String   @id @default(cuid())
+  eventId         String
+  name            String                         // Ex: "Pista", "VIP", "Camarote"
+  description     String?
+  color           String?                        // Cor para identificação visual (hex)
+  isVip           Boolean  @default(false)
+  amenities       String[] @default([])          // Ex: ["Open bar", "Área exclusiva"]
+  position        Int      @default(0)           // Ordem de exibição
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  event           Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  batches         Batch[]
+  seats           Seat[]
+
+  @@map("ticket_types")
+}
+
+// ============================================================
+// LOTE DE INGRESSO
+// ============================================================
+
+model Batch {
+  id              String      @id @default(cuid())
+
+  // ❌ REMOVE ISSO
+  // eventId         String
+  // event           Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  ticketTypeId    String
+  ticketType      TicketType @relation(fields: [ticketTypeId], references: [id])
+
+  name            String
+  description     String?
+  status          BatchStatus @default(SCHEDULED)
+
+  price           Float
+  originalPrice   Float?
+
+  totalQuantity   Int
+  soldQuantity    Int        @default(0)
+  reservedQuantity Int       @default(0)
+
+  startSaleAt     DateTime?
+  endSaleAt       DateTime?
+
+  minPerOrder     Int        @default(1)
+  maxPerOrder     Int        @default(10)
+  position        Int        @default(0)
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  orderItems      OrderItem[]
+
+  @@map("batches")
+}
+// ============================================================
+// MAPA DE ASSENTOS
+// ============================================================
+
+model SeatMap {
+  id        String   @id @default(cuid())
+  eventId   String   @unique
+  mapData   Json                   // JSON com layout do mapa (rows, cols, sections)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  seats Seat[]
+
+  @@map("seat_maps")
+}
+
+model Seat {
+  id           String     @id @default(cuid())
+  seatMapId    String
+  ticketTypeId String
+  row          String                       // Ex: "A", "B"
+  number       Int                          // Número do assento
+  label        String                       // Ex: "A-12"
+  status       SeatStatus @default(AVAILABLE)
+
+  seatMap    SeatMap    @relation(fields: [seatMapId], references: [id], onDelete: Cascade)
+  ticketType TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticket     Ticket?
+
+  @@unique([seatMapId, row, number])
+  @@map("seats")
+}
+
+// ============================================================
+// CUPONS DE DESCONTO
+// ============================================================
+
+model Coupon {
+  id              String     @id @default(cuid())
+  eventId         String
+  code            String
+  type            CouponType
+  value           Float                          // % ou R$ dependendo do type
+  minOrderValue   Float?                         // Valor mínimo do pedido
+  maxDiscount     Float?                         // Desconto máximo (p/ tipo %)
+  totalLimit      Int?                           // Limite total de usos (null = ilimitado)
+  perUserLimit    Int        @default(1)         // Limite por usuário
+  usedCount       Int        @default(0)
+  isActive        Boolean    @default(true)
+  startsAt        DateTime?
+  expiresAt       DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  event           Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  orders          Order[]
+
+  @@unique([eventId, code])
+  @@index([code])
+  @@map("coupons")
+}
+
+// ============================================================
+// PEDIDO
+// ============================================================
+
+model Order {
+  id              String        @id @default(cuid())
+  userId          String
+  eventId         String
+  couponId        String?
+  status          OrderStatus   @default(PENDING)
+
+  // Valores
+  subtotal        Float                          // Soma dos itens sem desconto
+  discountAmount  Float         @default(0)      // Desconto do cupom
+  platformFee     Float         @default(0)      // Taxa da plataforma
+  total           Float                          // Total final pago
+
+  // Pagamento
+  paymentMethod   PaymentMethod?
+  paymentId       String?                        // ID externo (gateway)
+  paymentData     Json?                          // Dados do gateway (PIX, cartão etc)
+  paidAt          DateTime?
+
+  // Expiração da reserva
+  expiresAt       DateTime?                      // Expiração do carrinho (10min)
+
+  // Dados do comprador no momento da compra
+  buyerName       String
+  buyerEmail      String
+  buyerCpf        String?
+  buyerPhone      String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User          @relation(fields: [userId], references: [id])
+  event           Event         @relation(fields: [eventId], references: [id])
+  coupon          Coupon?       @relation(fields: [couponId], references: [id])
+  items           OrderItem[]
+  tickets         Ticket[]
+
+  @@index([userId])
+  @@index([eventId, status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  batchId     String
+  quantity    Int
+  unitPrice   Float    // Preço unitário no momento da compra (snapshot)
+  totalPrice  Float    // quantity * unitPrice
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  batch       Batch    @relation(fields: [batchId], references: [id])
+
+  @@map("order_items")
+}
+
+// ============================================================
+// INGRESSO (gerado após pagamento confirmado)
+// ============================================================
+
+model Ticket {
+  id              String       @id @default(cuid())
+  orderId         String
+  userId          String
+  seatId          String?      @unique
+  qrCode          String       @unique   // UUID único para QR Code
+  status          TicketStatus @default(ACTIVE)
+
+  // Snapshot do ingresso no momento da compra
+  eventTitle      String
+  ticketTypeName  String
+  batchName       String
+  pricePaid       Float
+  holderName      String       // Nome do portador
+  holderCpf       String?
+
+  // Transferência
+  transferredAt   DateTime?
+  transferredFrom String?      // userId anterior
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  order           Order        @relation(fields: [orderId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+  seat            Seat?        @relation(fields: [seatId], references: [id])
+  checkIn         CheckIn?
+
+  @@index([qrCode])
+  @@index([userId])
+  @@map("tickets")
+}
+
+// ============================================================
+// CHECK-IN
+// ============================================================
+
+model CheckIn {
+  id        String        @id @default(cuid())
+  ticketId  String        @unique
+  eventId   String
+  staffId   String?                          // Usuário que fez o check-in
+  method    CheckInMethod @default(QR_CODE)
+  checkedAt DateTime      @default(now())
+  notes     String?
+
+  ticket    Ticket        @relation(fields: [ticketId], references: [id])
+  event     Event         @relation(fields: [eventId], references: [id])
+  staff     User?         @relation("CheckInStaff", fields: [staffId], references: [id])
+
+  @@map("check_ins")
 }

@@ -51,7 +51,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">{children}
        <Toaster />
-         <BottomNav />
+        
          <PWARegistration />
          <InstallButton />
       </body>
