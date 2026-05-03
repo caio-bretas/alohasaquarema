@@ -15,11 +15,11 @@ export function EventCard({ id, title, price, date, location, image }: EventCard
   return (
     <div className="group relative bg-white border border-zinc-100 rounded-[2rem] p-4 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-500">
       <div className="relative h-48 w-full rounded-[1.5rem] overflow-hidden">
-        <Image
+        <img
           src={image || "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=500"}
           alt={title}
-        fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
+       
+          className="object-cover group-hover:scale-110 transition-transform duration-700 w-full h-full"
         />
         {/* Badge de Preço */}
         <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full shadow-lg">

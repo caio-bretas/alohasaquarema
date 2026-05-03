@@ -6,8 +6,8 @@ interface ResultProps {
   item: {
     id: number | string;
     title: string;
-    location: string;
-    image: string;
+    address: string;
+    coverImageUrl: string;
     category: string;
     rating: string;
   }
@@ -18,11 +18,11 @@ export function SearchResultCard({ item }: ResultProps) {
     <Link href={`/eventos/${item.id}`} className="w-full block">
       <div className="flex items-center gap-3 p-2 bg-white border border-zinc-100 rounded-2xl w-full active:scale-[0.98] transition-all">
         <div className="relative size-16 sm:size-20 rounded-xl overflow-hidden shrink-0 shadow-sm">
-          <Image 
-            src={item.image} 
+          <img 
+            src={item.coverImageUrl || "/benner.png"} 
             alt={item.title} 
-            fill 
-            className="object-cover"
+             
+            className="object-cover w-full h-full"
           />
         </div>
         
@@ -37,7 +37,7 @@ export function SearchResultCard({ item }: ResultProps) {
           <h3 className="font-bold text-zinc-900 text-sm truncate uppercase">{item.title}</h3>
           <div className="flex items-center gap-1 mt-1 text-zinc-400">
             <MapPin className="size-3 text-blue-500 shrink-0" />
-            <span className="text-[10px] font-medium truncate italic">{item.location}</span>
+            <span className="text-[10px] font-medium truncate italic">{item.address}</span>
           </div>
         </div>
       </div>

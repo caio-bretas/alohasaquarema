@@ -1,9 +1,13 @@
 import { Save } from "lucide-react";
 import { SettingsNav } from "./_components/SettingsNav";
 import { ProfileSettings } from "./_components/SettingSections";
+import { auth } from "@/lib/auth";
+import { getProfileAction } from "./actions/getprodutora";
 
 
-export default function ConfiguracoesPage() {
+export default async function ConfiguracoesPage() {
+  const session = await auth();
+  const profileProducer = await getProfileAction();
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-20">
       
@@ -33,7 +37,7 @@ export default function ConfiguracoesPage() {
 
         {/* CONTEÚDO PRINCIPAL */}
         <main className="lg:col-span-9">
-          <ProfileSettings />
+          <ProfileSettings session={session} Producer={profileProducer} />
 
           {/* DANGER ZONE */}
           <div className="mt-12 p-6 border border-red-100 bg-red-50/30 rounded-3xl">

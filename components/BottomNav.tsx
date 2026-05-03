@@ -22,9 +22,9 @@ export function BottomNav() {
         <span className="text-xs">Buscar</span>
       </Link>
 
-      <Link href="/favorites" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
-        <Heart size={22} />
-        <span className="text-xs">Favoritos</span>
+      <Link href="/meusingressos" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
+        <Ticket size={22} />
+        <span className="text-xs">Meus Ingressos</span>
       </Link>
 
       <Link href="/profile" className="flex flex-col items-center text-gray-600 hover:text-blue-500">

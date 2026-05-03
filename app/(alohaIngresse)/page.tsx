@@ -10,6 +10,7 @@ import { CategoriasEventos } from "../(aloha)/event/components/CategoriasEventos
 import { EventCard } from "../(aloha)/event/components/EventCard";
 import { FeaturedCarousel } from "../(aloha)/event/components/FeaturedCarousel";
 import { BuscarEventos } from "../(aloha)/event/components/BuscarEventos";
+import { getEventsAction } from "./actions/get-events";
 
 // Componentes
 
@@ -21,6 +22,20 @@ export default async function Home() {
     image: session?.user?.image || ""
   };
 
+  const {events, error} = await getEventsAction();
+const price = events.map((event) => event.ticketTypes.map((ticketType) => ticketType.batches.map((batch) => batch.price)))
+function formatToBRL(value: number | string) {
+  const numberValue = Number(value)
+
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(numberValue)
+}
+
+const formattedPrice = formatToBRL(price as any)
+console.log("formattedPrice", formattedPrice)
+console.log("price", price)
   return (
     <div className="min-h-screen bg-white pb-32 overflow-x-hidden">
       
@@ -56,7 +71,7 @@ export default async function Home() {
 
         {/* DESTAQUES (CARROSSEL) */}
         <section className="animate-in fade-in zoom-in-95 duration-1000">
-          <FeaturedCarousel />
+          <FeaturedCarousel  events={events}/>
         </section>
 
         {/* CATEGORIAS */}
@@ -74,57 +89,28 @@ export default async function Home() {
         </section>
 
         {/* FEED DE INGRESSOS */}
-        <section className="pb-10">
-          <div className="mb-8 md:mb-12 flex items-end justify-between border-b border-zinc-100 pb-6">
-            <div>
-              <h2 className="text-lg md:text-3xl font-black text-zinc-900 uppercase tracking-tighter italic">Próximos Eventos</h2>
-              <p className="text-[10px] md:text-xs text-zinc-400 font-bold uppercase mt-1 italic">Ingressos disponíveis agora</p>
-            </div>
-            <div className="flex gap-3">
-               <button className="p-3 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform">
-                  <Calendar className="size-5" />
-               </button>
-               <button className="p-3 bg-zinc-100 rounded-xl text-zinc-400 hover:bg-zinc-200 transition-colors">
-                  <Ticket className="size-5" />
-               </button>
-            </div>
-          </div>
-          
-          {/* Grid Inteligente: 1 col mobile, 2 tablet, 3/4 PC */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-200">
-            <EventCard 
-              id={1}
-              image={Dg.src}
-              title="Show Sertanejo Saquarema" 
-              price="R$ 45,00" 
-              date="20 Jun"
-              location="Centro"
-            />
-            <EventCard 
-              id={2}
-              image={Bl.src}
-              title="Luau de Itaúna" 
-              price="Grátis" 
-              date="12 Jul"
-              location="Beira Mar"
-            />
-            {/* Repetindo para preencher o grid no PC */}
-            <EventCard 
-              id={3}
-              image={Dg.src}
-              title="Pagode do Fortão" 
-              price="R$ 25,00" 
-              date="05 Ago"
-              location="Itaúna"
-            />
-            <EventCard 
-              id={4}
-              image={Bl.src}
-              title="Vans World Surf" 
-              price="Grátis" 
-              date="18 Out"
-              location="Praia da Vila"
-            />
+       <section className="pb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
+            
+            {error && (
+              <div className="col-span-full p-4 bg-red-50 text-red-600 rounded-2xl text-center">
+                {error}
+              </div>
+            )}
+
+            {events.length > 0 ? (
+              events.map((event) => (
+                <EventCard key={event.id} date={event.startDate as any} id={event.id} location={event.address} price={formattedPrice} title={event.title} image={event.coverImageUrl as any} />
+              ))
+            ) : (
+              !error && (
+                <div className="col-span-full py-20 text-center">
+                  <p className="text-zinc-400 font-bold uppercase tracking-widest italic">
+                    Nenhum evento disponível no momento.
+                  </p>
+                </div>
+              )
+            )}
           </div>
         </section>
       </main>

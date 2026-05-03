@@ -10,15 +10,15 @@ import { toast } from "sonner";
 interface UserData{
     nome?: string,
     email?: string
-    telefone?: string
+    phone?: string
 }
-export function FormEditPerfil({email,nome,telefone}:  UserData){
+export function FormEditPerfil({email,nome,phone}:  UserData){
      const form = useForm<FormEditSchema>({
     resolver: zodResolver(formeditschema),
     defaultValues: {
       nome: nome || "",
       email: email || "",
-      telefone: telefone || "",
+      phone: phone || "",
       
     },
   })
@@ -82,7 +82,7 @@ export function FormEditPerfil({email,nome,telefone}:  UserData){
               )}
             />
                   <Controller
-              name="telefone"
+              name="phone"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

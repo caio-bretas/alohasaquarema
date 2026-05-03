@@ -22,7 +22,7 @@ try{
         data: {
             name: data.nome,
             email: data.email,
-            phone: data.telefone
+            phone: data.phone
         }
     })
 

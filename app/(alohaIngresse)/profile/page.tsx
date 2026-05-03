@@ -11,13 +11,16 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import  {ButtonLogin}  from "./_components/ButtonLogin"
 import { ProfileContent } from "./_components/ProfileContent"
+import { Avatar } from "@/components/ui/avatar"
 
 export default async  function ProfilePage() {
 
 
 const session = await auth();
-console.log("AUTH_URL:", process.env.AUTH_URL);
-console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
+
+console.log("Session:", session)
+
+
 if (!session?.user) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#FAFAFA] p-6">
@@ -35,12 +38,12 @@ if (!session?.user) {
   );
 }
 
-console.log("SESSION:", session);
+
 
 
   return (
     <div className="min-h-screen bg-zinc-50 w-full overflow-x-hidden pb-32">
-      
+   
       {/* Header com Botão de Voltar */}
       <header className="px-6 py-6 flex items-center gap-4 bg-white border-b border-zinc-100">
         <Link href="/" className="p-2 hover:bg-zinc-100 rounded-xl transition-all">
@@ -48,6 +51,7 @@ console.log("SESSION:", session);
         </Link>
         <h1 className="text-xl font-black text-zinc-900 uppercase tracking-tighter italic">Perfil</h1>
       </header>
+      
      <ProfileContent />
       {/* Reutilizando sua Nav de App para manter a consistência */}
   

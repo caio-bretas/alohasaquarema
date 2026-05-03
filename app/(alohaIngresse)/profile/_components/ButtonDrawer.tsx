@@ -22,14 +22,14 @@ type Props = {
   item: any
   email: string
   name: string
-  telefone?: string
+  phone?: string
 }
-export function ButtonDrawer({ item, email, name , telefone}: Props) {
+export function ButtonDrawer({ item, email, name , phone}: Props) {
 const Icon = icons[item.icon as keyof typeof icons]
 function renderContent(label: string) {
   switch (label) {
     case "Informações Pessoais":
-      return <FormEditPerfil telefone={telefone} email={email} nome={name} /> 
+      return <FormEditPerfil phone={phone} email={email} nome={name} /> 
 
     case "Configuração":
       return <h1>Segurança e Senha ss</h1>

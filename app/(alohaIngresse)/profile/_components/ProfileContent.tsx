@@ -26,13 +26,15 @@ import { ButtonDrawer } from "./ButtonDrawer"
 
 export async function ProfileContent() {
   const session = await  auth();
+
   const userdata = {
     name: session?.user?.name!,
     email: session?.user?.email!,
-    image: session?.user?.image,
-    telefone: session?.user?.telefone || ""
+    image: session?.user?.image!,
+    phone: session?.user?.phone || ""
   }
 
+console.log("data imagem", userdata.image)
   if(!session) return <ButtonLogin />
  const sections = [
   {
@@ -58,7 +60,7 @@ export async function ProfileContent() {
  <section className="flex flex-col items-center text-center space-y-4">
           <div className="relative">
             <div className="size-28 rounded-[2.5rem] bg-zinc-200 overflow-hidden border-4 border-zinc-800 shadow-xl">
-             <img src={userdata.image || "/default.png"} alt="" />
+             <img src={userdata.image || "/default.png"} alt="" className="w-full h-full" />
               <div className="w-full h-full bg-gradient-to-tr from-blue-600 to-purple-600" />
             </div>
             <button className="absolute bottom-0 right-0 p-2.5 bg-zinc-900 text-white rounded-2xl border-4 border-white shadow-lg active:scale-90 transition-all">
@@ -95,7 +97,7 @@ export async function ProfileContent() {
         : ""
     }`}
   >
-    <ButtonDrawer item={item} email={userdata.email} telefone={userdata.telefone   } name={userdata.name}  />
+    <ButtonDrawer item={item} email={userdata.email} phone={userdata.phone} name={userdata.name}  />
   </div>
 ))}
               </div>

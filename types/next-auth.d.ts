@@ -7,12 +7,12 @@ declare module "next-auth" {
       name?: string | null
       email?: string | null
       image?: string | null
-      telefone?: string | null
+      phone?: string | null
     }
   }
 
   interface User {
     id: string
-    telefone?: string | null
+    phone?: string | null
   }
 }

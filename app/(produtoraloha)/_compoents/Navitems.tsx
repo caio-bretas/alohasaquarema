@@ -39,19 +39,11 @@ export function NavItems() {
       path: "/participantes",
       icon: Users,
     },
-    {
-      label: "Relatórios",
-      path: "/relatorios",
-      icon: BarChart3,
-    },
+
   ]
 
   const configItems: NavItem[] = [
-    {
-      label: "Locais",
-      path: "/locais",
-      icon: MapPin,
-    },
+    
     {
       label: "Configurações",
       path: "/configuracoes",
