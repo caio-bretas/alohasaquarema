@@ -3,11 +3,20 @@ import { Ticket, Sparkles } from "lucide-react"
 
 import { getUserTicketsAction } from "../actions/getUserTicketsAction"
 import TicketsPage from "./_components/ticketsPage"
+import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function Page() {
 
+  const session = await auth()
+  if(!session?.user?.id) {
+   
+    return  redirect("/profile")
+  
+  }
+  const id = session?.user?.id
   const { tickets } =
-    await getUserTicketsAction("cmopukivn0001fotctfimgzmv")
+    await getUserTicketsAction(id!)
 
   if (!tickets.length) {
     return (
