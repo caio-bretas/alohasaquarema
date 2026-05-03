@@ -10,7 +10,7 @@ export default async function Eventos() {
 
   const { events } = await getEventsAction()
 
-
+console.log(events)
   return (
     <div className="flex flex-col p-5 pb-32 min-h-screen w-full bg-white">
 

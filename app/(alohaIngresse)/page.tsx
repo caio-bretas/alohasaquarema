@@ -117,6 +117,7 @@ console.log("price", price)
       }).format(value)
     }
 
+    console.log("eventos: ",event)
     return (
       <EventCard
         key={event.id}
@@ -128,7 +129,7 @@ console.log("price", price)
             ? formatToBRL(lowestPrice)
             : "Grátis"
         }
-        date={new Date(event.startDate).toLocaleDateString("pt-BR", {
+        date={new Date(event.salesStartAt as any).toLocaleDateString("pt-BR", {
           day: "2-digit",
           month: "short",
         })}
