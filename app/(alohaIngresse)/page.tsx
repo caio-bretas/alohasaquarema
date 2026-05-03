@@ -23,7 +23,11 @@ export default async function Home() {
   };
 
   const {events, error} = await getEventsAction();
-const price = events.map((event) => event.ticketTypes.map((ticketType) => ticketType.batches.map((batch) => batch.price)))
+const price = events.map((event) =>
+  event.ticketTypes.map((ticketType) =>
+    ticketType.batches.map((batch) => batch.price)
+  )
+)
 function formatToBRL(value: number | string) {
   const numberValue = Number(value)
 
@@ -98,19 +102,49 @@ console.log("price", price)
               </div>
             )}
 
-            {events.length > 0 ? (
-              events.map((event) => (
-                <EventCard key={event.id} date={event.startDate as any} id={event.id} location={event.address} price={formattedPrice} title={event.title} image={event.coverImageUrl as any} />
-              ))
-            ) : (
-              !error && (
-                <div className="col-span-full py-20 text-center">
-                  <p className="text-zinc-400 font-bold uppercase tracking-widest italic">
-                    Nenhum evento disponível no momento.
-                  </p>
-                </div>
-              )
-            )}
+     {events.length > 0 ? (
+  events.map((event) => {
+
+    const lowestPrice =
+      event.ticketTypes
+        ?.flatMap((ticket) => ticket.batches)
+        ?.sort((a, b) => a.price - b.price)[0]?.price
+
+    function formatToBRL(value: number) {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(value)
+    }
+
+    return (
+      <EventCard
+        key={event.id}
+        id={event.id}
+        image={event.coverImageUrl || "/benner.png"}
+        title={event.title}
+        price={
+          lowestPrice
+            ? formatToBRL(lowestPrice)
+            : "Grátis"
+        }
+        date={new Date(event.startDate).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "short",
+        })}
+        location={event.address}
+      />
+    )
+  })
+) : (
+  !error && (
+    <div className="col-span-full py-20 text-center">
+      <p className="text-zinc-400 font-bold uppercase tracking-widest italic">
+        Nenhum evento disponível no momento.
+      </p>
+    </div>
+  )
+)}
           </div>
         </section>
       </main>

@@ -1,7 +1,7 @@
 "use client"
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
-import GithubIcon from "@/public/github.svg" // Renomeado para clareza
+import GithubIcon from "@/public/google.svg"; // Renomeado para clareza
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 
@@ -36,7 +36,7 @@ export function ButtonLogin() {
                     </div>
                     <div className="flex flex-col items-start text-left">
                         <span className="text-sm font-semibold text-zinc-900">
-                            {isLoading ? "Conectando..." : "Entrar com GitHub"}
+                            {isLoading ? "Conectando..." : "Entrar com Google"}
                         </span>
                         <span className="text-xs text-zinc-500 font-normal">Acesso rápido e seguro</span>
                     </div>
