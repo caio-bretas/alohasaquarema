@@ -5,7 +5,7 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "/aloha.png", 
+      "src": "/logo.png", 
    
       "type": "image/png",
       "sizes": "192x192"

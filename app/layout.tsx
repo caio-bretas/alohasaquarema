@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description: "Gerado pelo Next.js",
   manifest: "/manifest.json",
   icons: {
-    icon: "/aloha.ico",
+    icon: "/logo.png",
   },
   appleWebApp: {
     capable: true,
@@ -47,7 +47,7 @@ export default function RootLayout({
     >
       <head>
        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/aloha.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body className="min-h-full flex flex-col">{children}
        <Toaster />
