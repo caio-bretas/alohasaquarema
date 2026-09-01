@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+🎟️ Ticketfy
 
-First, run the development server:
+Plataforma digital para divulgação, gerenciamento e venda de ingressos para eventos.
 
-```bash
+
+
+
+
+Sobre o projeto
+
+O Ticketfy é um projeto acadêmico desenvolvido para facilitar a experiência de quem organiza e participa de eventos. A plataforma reúne, em um único ambiente, a descoberta de eventos, a escolha de ingressos e o acompanhamento das compras.
+
+O projeto busca aplicar, na prática, conhecimentos adquiridos no curso de Engenharia de Software, como levantamento de requisitos, experiência do usuário, desenvolvimento web, banco de dados, segurança e trabalho em equipe.
+
+Principais funcionalidades
+
+Visualização e pesquisa de eventos;
+
+Consulta de informações, datas, locais e valores;
+
+Escolha do tipo e da quantidade de ingressos;
+
+Seleção de assentos, quando disponível no evento;
+
+Finalização e acompanhamento da compra;
+
+Área do usuário para consultar seus ingressos;
+
+Interface responsiva para computadores e celulares.
+
+Demonstração
+
+🔗 Acesse o projeto: ticketfy.vercel.app
+
+Tecnologias
+
+Esta seção deve ser atualizada de acordo com as tecnologias utilizadas na versão final do projeto.
+
+Front-end: Next.js, React, TypeScript e Tailwind CSS;
+
+Interface: componentes reutilizáveis e design responsivo;
+
+Hospedagem: Vercel;
+
+Versionamento: Git e GitHub.
+
+Como executar o projeto
+
+Pré-requisitos
+
+Node.js instalado;
+
+Git instalado;
+
+Gerenciador de pacotes npm, pnpm, yarn ou bun.
+
+Instalação
+
+# Clone o repositório
+git clone URL_DO_REPOSITORIO
+
+# Acesse a pasta do projeto
+cd ticketfy
+
+# Instale as dependências
+npm install
+
+# Inicie o ambiente de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Depois, abra http://localhost:3000 no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Antes da entrega, substitua URL_DO_REPOSITORIO pelo endereço real do repositório e confirme os comandos usados pelo projeto.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Estrutura sugerida
 
-## Learn More
+ticketfy/
+├── app/                 # Páginas e rotas da aplicação
+├── components/          # Componentes reutilizáveis
+├── public/              # Imagens, ícones e arquivos públicos
+├── lib/                 # Funções auxiliares e configurações
+├── package.json         # Dependências e scripts
+└── README.md            # Documentação do projeto
 
-To learn more about Next.js, take a look at the following resources:
+Projeto acadêmico
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Instituição: Campus Universitário de Saquarema
+Curso: Engenharia de Software
+Projeto: Ticketfy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Integrantes
 
-## Deploy on Vercel
+Diego Santos Mendes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Caio Henrique Bretas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Luna Vasconcelos Maximiano
+
+João Victor Vidinha
+
+Brenno César Gonçalves dos Santos
+
+Rodrigo Monclaro
+
+Objetivos acadêmicos
+
+Planejar e desenvolver uma aplicação web funcional;
+
+Aplicar conceitos de arquitetura e projeto de software;
+
+Trabalhar com componentes, rotas e persistência de dados;
+
+Desenvolver uma interface acessível e responsiva;
+
+Utilizar versionamento de código e colaboração em equipe;
+
+Documentar as decisões e o funcionamento do sistema.
+
+Status do projeto
+
+🚧 Em desenvolvimento. Novas funcionalidades, melhorias de interface e correções podem ser adicionadas durante a evolução do projeto.
+
+Licença
+
+Projeto desenvolvido exclusivamente para fins acadêmicos. Caso uma licença de código aberto seja adotada, esta seção deverá ser atualizada.
+
+Desenvolvido pela equipe Ticketfy — Engenharia de Software, Campus Universitário de Saquarema.
