@@ -11,6 +11,7 @@ import { EventContent } from "../_components/evennt-card"
 
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { getEventoById } from "./actions/getEventos"
 
 export default async function EventoDetalhes({
   params,
@@ -18,28 +19,23 @@ export default async function EventoDetalhes({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
- const session = await auth();
-  // Busca evento no banco
-  const evento = await prisma.event.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      ticketTypes: {
-        include: {
-          batches: {
-            where: {
-              status: "ACTIVE",
-            },
-            orderBy: {
-              price: "asc",
-            },
-          },
-        },
-      },
-    },
-  })
 
+  // Busca evento no banco
+const result = await getEventoById(id);
+
+if (!result.data) {
+  return notFound();
+}
+
+const evento = result.data;
+const session = await auth();
+
+if (!session?.user?.id) {
+  return {
+    data: null,
+    error: "Usuário não autenticado",
+  };
+}
   console.log("Evento:", evento)
   if (!evento) return notFound()
 

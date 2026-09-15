@@ -34,44 +34,97 @@ export default function CheckoutPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  async function handlePixPayment() {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/fake-pix", {
+ async function confirmFakePayment(
+  orderId: string,
+) {
+  try {
+    const response = await fetch(
+      "/api/fake-pix/confirm",
+      {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
         body: JSON.stringify({
-          userId: data.session.user.id,
+          orderId,
+        }),
+      },
+    );
+
+    const result = await response.json();
+
+    if (!result.success) {
+      alert(
+        result.error ||
+          "Não foi possível confirmar o pagamento",
+      );
+      return;
+    }
+
+    setSuccess(true);
+    localStorage.removeItem(
+      "checkout_data",
+    );
+
+    window.setTimeout(() => {
+      router.push("/meusingressos");
+    }, 3000);
+  } catch (error) {
+    console.error(error);
+    alert(
+      "Erro ao confirmar o pagamento",
+    );
+  }
+}
+
+async function handlePixPayment() {
+  try {
+    setLoading(true);
+
+    const response = await fetch(
+      "/api/fake-pix",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
           eventId: data.eventId,
           items: data.items,
         }),
-      });
+      },
+    );
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (!result.success) {
-        alert("Erro ao gerar PIX");
-        return;
-      }
-
-      setPixCode(result.pixCode?.pixCode || "");
-
-      // Simulação de processamento de pagamento
-      setTimeout(() => {
-        setSuccess(true);
-        localStorage.removeItem("checkout_data");
-        setTimeout(() => {
-          router.push("/meusingressos");
-        }, 3000);
-      }, 4000);
-    } catch (error) {
-      console.error(error);
-      alert("Erro no pagamento");
-    } finally {
-      setLoading(false);
+    if (!result.success) {
+      alert(
+        result.error ||
+          "Erro ao gerar PIX",
+      );
+      return;
     }
-  }
 
+    const generatedPixCode =
+      result.pixCode?.pixCode || "";
+
+    setPixCode(generatedPixCode);
+
+    // Simula o gateway confirmando o PIX.
+    window.setTimeout(() => {
+      void confirmFakePayment(
+        result.orderId,
+      );
+    }, 4000);
+  } catch (error) {
+    console.error(error);
+    alert("Erro no pagamento");
+  } finally {
+    setLoading(false);
+  }
+}
   if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-zinc-50">
@@ -115,20 +168,19 @@ export default function CheckoutPage() {
                     key={index}
                     className="flex justify-between items-center bg-zinc-50 border border-zinc-100 rounded-2xl p-4"
                   >
-                    <div>
-                      <p className="font-black text-xs uppercase italic text-zinc-900">
-                        Ingresso Evento
-                      </p>
-                      <span className="text-zinc-400 text-[10px] font-bold uppercase tracking-tighter">
-                        Qtd: {item.quantity}
-                      </span>
-                    </div>
-                    <span className="font-black italic text-zinc-900">
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      }).format(data.total)}
-                    </span>
+                   <p className="font-black text-xs uppercase italic text-zinc-900">
+  {item.name || "Ingresso Evento"}
+</p>
+
+<span className="font-black italic text-zinc-900">
+  {new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(
+    item.totalPrice ?? data.total,
+  )}
+</span>
+                    
                   </div>
                 ))}
               </div>
